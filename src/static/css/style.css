@@ -1,0 +1,44 @@
+body {
+  background-color: #1d2a35;
+  color: white;
+  font-size: 20px;
+}
+
+h1 {
+  padding-bottom: 20px;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.item {
+  padding-bottom: 20px;
+}
+
+.nav {
+  float: left;
+}
+
+li a {
+  color: white;
+  display: block;
+  text-align: center;
+  padding: 15px 15px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #111;
+}
+
+.navbar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}

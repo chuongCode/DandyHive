@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Add User</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	{% block body %}
+	<h1>Add a mentor!</h1>
+	<form action="{{url_for('register')}}" method = "POST">
+		{{ form.hidden_tag() }}
+		<ul>
+			<li class="item"> {{ form.username.label }} {{ form.username() }} </li>
+			<li class="item"> {{ form.password.label }} {{ form.password() }} </li>
+
+			<li class="item"> {{ form.fname.label }} {{ form.fname() }} </li>
+			<li class="item"> {{ form.lname.label }} {{ form.lname() }} </li>
+			<li class="item"> {{ form.submit() }} </li>
+		</ul>
+
+	</form>
+	{% endblock %}
+</body>
+</html>
