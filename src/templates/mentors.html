@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Mentor list</title>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    {% block body %}
+    <h1> Mentor List </h1>
+    {% for user in users %}
+    <p>{{user.username}}</p>
+    <p>{{user.firstname}}</p>
+    <p>{{user.lastname}}</p>
+    </p>
+    {% endfor %}
+    {% endblock %}
+</body>
+
+</html>

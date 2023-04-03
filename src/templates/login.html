@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+<!doctype html>
+<html lang="en">
+<head>
+    {% block head %}
+	<title>Log In</title>
+	<meta charset="utf-8">
+    {% endblock %}
+</head>
+<body>
+    {% block body %}
+		<h1>Log In</h1>
+		{% for message in get_flashed_messages() %}
+			{{ message }}
+	    {% endfor %}
+		<form action="{{url_for('login')}}" method = "POST">
+			{{ form.hidden_tag() }}
+			{{ form.username.label }} {{ form.username() }}
+			{{ form.password.label }} {{ form.password() }}
+			{{ form.remember_me.label }} {{ form.remember_me() }}
+			{{ form.submit() }}
+		</form>
+    {% endblock %}
+</body>
+</html>

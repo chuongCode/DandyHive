@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Delete User</title>
+	<meta charset = "utf-8">
+</head>
+<body>
+	{% block body %}
+	<h1>Remove a mentor from the database</h1>
+	<form action="{{url_for('delete')}}" method = "POST">
+		{{form.hidden_tag()}}
+		{{form.username.label}} {{form.username()}}
+		{{form.submit()}}
+	</form>
+	{% endblock %}
+</body>
+</html>
