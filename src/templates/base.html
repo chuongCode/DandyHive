@@ -5,12 +5,9 @@
 	<title>Base template</title>
 	<meta charset="utf-8">
     {% endblock %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-	{% block body %}
-
-    {% endblock %}
     <ul class="navbar">
         <li class="nav"> <h3> <a href="{{url_for('home')}}">Home</a> </h3> </li>
         <li class="nav"> <h3> <a href="{{url_for('register')}}">Register</a> </h3> </li>
@@ -19,6 +16,10 @@
         <li class="nav"> <h3> <a href="{{url_for('delete')}}">Delete mentors</a> </h3> </li>
         <li class="nav"> <h3> <a href="{{url_for('mentors')}}">Browse mentors</a> </h3> </li>
     </ul>
+	{% block body %}
+
+    {% endblock %}
+    
 
 </body>
 </html>

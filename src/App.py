@@ -92,6 +92,8 @@ class DeleteForm(FlaskForm):
 def index():
     return render_template("home.html")
 
+
+
 @app.route("/register.html", methods = ["GET", "POST"])
 def register():
     form = UserForm()
@@ -148,6 +150,10 @@ def mentors():
 @app.route("/home.html")
 def home():
     return render_template("home.html")
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("page_not_found.html"), 404
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 def createUser(username, fname, lname, pw):

@@ -1,19 +1,29 @@
+{% extends "base.html" %}
 <!DOCTYPE html>
 <html lang="en">
 
+	
 	<head>
+		{% block head %}
 		<meta charset="utf-8">
-		<title>Dandyhive - 404 Not Found Error</title>
+		<title>404 Error</title>
 		<link rel="stylesheet" type="text/css" href="css/styles.css">
+		{% endblock %}
 	</head>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 	<body>
+		{% block body %}
 		<div class="content"> 
 			<div class="box"> 
-				<h1>A 404 Error was encountered while processing your request.</h1>
-				<p>Return home <a href="404error.html">here</a>.</p>
+				<h1 style="margin-top: 20rem; text-align: center">
+					A 404 Error was encountered while processing your request.
+				</h1>
+				<p style="text-align: center">
+					Return home <a href="{{url_for('home')}}" style="color:#FFD100">here</a>.
+				</p>
 			</div>
 		</div>
-		
+		{% endblock %}
 	</body>
 </html>
