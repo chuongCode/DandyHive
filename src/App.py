@@ -105,13 +105,7 @@ def index():
 def home():
     return render_template("home.html")
 
-<<<<<<< HEAD
 @app.route("/register", methods = ["GET", "POST"])
-=======
-
-
-@app.route("/register.html", methods = ["GET", "POST"])
->>>>>>> f500a0da9dd0478d284e3cb3fa587edb8d0de962
 def register():
     form = UserForm()
 
@@ -164,16 +158,9 @@ def mentors():
     users = User.query.all()
     return render_template("mentors.html", users=users)
 
-<<<<<<< HEAD
-=======
-@app.route("/home.html")
-def home():
-    return render_template("home.html")
-
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("page_not_found.html"), 404
->>>>>>> f500a0da9dd0478d284e3cb3fa587edb8d0de962
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 def createUser(username, fname, lname, pw):
