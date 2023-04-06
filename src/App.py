@@ -22,7 +22,6 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(basedir, "data.sqlite")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SECRET_KEY"] = "abc123"
-app.config['TESTING'] = False
 
 db = SQLAlchemy(app)
 
@@ -35,10 +34,10 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     firstname = db.Column(db.String(64), index = True)
     lastname = db.Column(db.String(64), index = True)
+    email = db.Column(db.String(64), index = True)
+    job = db.Column(db.String(64), index = True)
     description = db.relationship('Description')
-
-    def __repr__(self):
-        return "<user %r>" % self.username
+    profile = db.relationship('profile')
 
     @property
     def password(self):
@@ -56,8 +55,18 @@ class Description(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     classyear = db.Column(db.String(64), index = True)
     major = db.Column(db.String(64), index = True)
-    bio = db.Column(db.String(64), index = True)
+    minor = db.Column(db.String(64), index = True)
+    cluster = db.Column(db.String(64), index = True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+class Profile(db.Model):
+    __tablename__ = "profile"
+    id = db.Column(db.Integer, primary_key = True)
+    industry = db.Column(db.String(64), index = True)
+    role = db.Column(db.String(64), index = True)
+    subject = db.Column(db.String(64), index = True)
+    organizations = db.Column(db.String(64), index = True)
+    bio = db.Column(db.String(64), index = True)
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -88,13 +97,21 @@ class DeleteForm(FlaskForm):
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-@app.route("/", methods = ["GET", "POST"])
+@app.route("/")
 def index():
+    return render_template("start.html")
+
+@app.route("/home")
+def home():
     return render_template("home.html")
 
+<<<<<<< HEAD
+@app.route("/register", methods = ["GET", "POST"])
+=======
 
 
 @app.route("/register.html", methods = ["GET", "POST"])
+>>>>>>> f500a0da9dd0478d284e3cb3fa587edb8d0de962
 def register():
     form = UserForm()
 
@@ -108,7 +125,7 @@ def register():
 
     return render_template("register.html", form = form)
 
-@app.route("/delete.html", methods = ["GET", "POST"])
+@app.route("/delete", methods = ["GET", "POST"])
 def delete():
     form = DeleteForm()
 
@@ -141,12 +158,14 @@ def logout():
     flash("You have been logged out.")
     return redirect(url_for("home"))
 
-@app.route("/mentors.html", methods = ["GET", "POST"])
+@app.route("/mentors", methods = ["GET"])
 @login_required
 def mentors():
     users = User.query.all()
     return render_template("mentors.html", users=users)
 
+<<<<<<< HEAD
+=======
 @app.route("/home.html")
 def home():
     return render_template("home.html")
@@ -154,6 +173,7 @@ def home():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("page_not_found.html"), 404
+>>>>>>> f500a0da9dd0478d284e3cb3fa587edb8d0de962
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 def createUser(username, fname, lname, pw):
