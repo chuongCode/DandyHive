@@ -6,3 +6,8 @@ To create virtual environment: `python -m venv "DandyHive"`
 To go to virtual environment: `bin source/activate`
 
 To start: `python3 ./src/App.py`
+
+## Windows 
+To start Venv: `.\DandyHiveVenv\Scripts\activate`
+To start app: `python .\src\App.py`
+
