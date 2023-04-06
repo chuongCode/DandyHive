@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 <!doctype html>
+<link href="{{url_for('static',filename='css/landing_page.css')}}" rel="stylesheet">
 <html lang="en">
 <head>
     {% block head %}
@@ -9,11 +10,39 @@
 </head>
 <body>
     {% block body %}
-	<h1> Welcome to DandyHive! </h1>
-    <p> DandyHive is a centralized hub for finding mentorships. 
+    
+    <div>
+        <img class= "center-fit" src= "{{ url_for('static', filename='images/landing_page1.png')}}" style="
+        background-repeat: no-repeat;
+        height: 750px;
+        padding-top:60px;
+        background-size: contain;
+        width: 100%;"/>
+        <h1 style="
+        position: absolute;
+        width: 785px;
+        height: 90px;
+        left: 350px;
+        top: 367px;
+        
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 75px;
+        line-height: 90px;
+        
+        text-align: center;">
+            Welcome to DandyHive!
+        </h1>
+    </div>
+
+	<!-- <h1> Welcome to DandyHive! </h1> -->
+    <!-- <span style="color:#FFD100; font-size:135px; rotate:(-15deg)">&#x2B22;</span> -->
+    <!-- <p> DandyHive is a centralized hub for finding mentorships. 
         If you are a student who seeks guidance from a peer but is intimidated by the vast social network on LinkedIn 
         or by the alumni on the Meliora Collective, then look no further. DandyHive was made with the intention of allowing
-        students to establish mentorship with only current students, especially students that share similar backgrounds or club membership.  </p>
+        students to establish mentorship with only current students, especially students that share similar backgrounds or club membership.  </p> -->
     {% endblock %}
+    
 </body>
 </html>
