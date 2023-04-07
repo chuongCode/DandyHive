@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Add User</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	{% block body %}
+	<h1>Add a mentor!</h1>
+	<form action="{{url_for('register_3')}}" method = "POST">
+		{{ form.hidden_tag() }}
+		<ul>
+			<li class="item"> {{ form.industry.label }} {{ form.industry() }} </li>
+			<li class="item"> {{ form.role.label }} {{ form.role() }} </li>
+			<li class="item"> {{ form.subject.label }} {{ form.subject() }} </li>
+			<li class="item"> {{ form.organizations.label }} {{ form.organizations() }} </li>
+			<li class="item"> {{ form.bio.label }} {{ form.bio() }} </li>
+			<li class="item"> {{ form.submit() }} </li>
+		</ul>
+
+	</form>
+	{% endblock %}
+</body>
+</html>

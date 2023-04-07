@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, redirect, url_for, flash, request
+from flask import Flask, session, render_template, redirect, url_for, flash, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, BooleanField
@@ -30,14 +30,14 @@ db = SQLAlchemy(app)
 class User(UserMixin, db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key = True)
-    username = db.Column(db.String(64), unique = True, index = True)
+    netid = db.Column(db.String(64), unique = True, index = True)
     password_hash = db.Column(db.String(128))
     firstname = db.Column(db.String(64), index = True)
     lastname = db.Column(db.String(64), index = True)
     email = db.Column(db.String(64), index = True)
-    job = db.Column(db.String(64), index = True)
+
     description = db.relationship('Description')
-    profile = db.relationship('profile')
+    profile = db.relationship('Profile')
 
     @property
     def password(self):
@@ -57,6 +57,7 @@ class Description(db.Model):
     major = db.Column(db.String(64), index = True)
     minor = db.Column(db.String(64), index = True)
     cluster = db.Column(db.String(64), index = True)
+
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 class Profile(db.Model):
@@ -68,12 +69,15 @@ class Profile(db.Model):
     organizations = db.Column(db.String(64), index = True)
     bio = db.Column(db.String(64), index = True)
 
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 class UserForm(FlaskForm):
-    username = StringField("Enter a username: ", validators=[DataRequired()])
-    fname = StringField("Enter your first name: ", validators=[DataRequired()])
-    lname = StringField("Enter your last name: ", validators=[DataRequired()])
+    netid = StringField("NetID: ", validators=[DataRequired()])
+    fname = StringField("First name: ", validators=[DataRequired()])
+    lname = StringField("Last name: ", validators=[DataRequired()])
+    email = StringField("Email: ", validators=[DataRequired()])
     password = PasswordField("Password: ", validators=[DataRequired()])
     submit = SubmitField("Register")
 
@@ -81,10 +85,18 @@ class DescriptionForm(FlaskForm):
     classyear = StringField("Enter your class year: ", validators=[DataRequired()])
     major = StringField("Enter your major: ", validators=[DataRequired()])
     bio = StringField("Enter a short bio: ", validators=[DataRequired()])
-    submit = SubmitField("Add Description")
+    submit = SubmitField("Add description")
+
+class ProfileForm(FlaskForm):
+    industry = StringField("What industries are you interested in?", validators=[DataRequired()])
+    role = StringField("What roles are you interested in?", validators=[DataRequired()])
+    subject = StringField("What do you want your sessions to focus on?", validators=[DataRequired()])
+    organizations = StringField("What student organizations are you involved in?", validators=[DataRequired()])
+    bio = StringField("Comments:", validators=[DataRequired()])
+    submit = SubmitField("Add preferences")
 
 class LoginForm(FlaskForm):
-    username = StringField("Username: ", validators=[DataRequired()])
+    netid = StringField("NetID: ", validators=[DataRequired()])
     password = PasswordField("Password: ", validators=[DataRequired()])
     remember_me = BooleanField("Keep me logged in")
     submit = SubmitField("Log In")
@@ -92,7 +104,7 @@ class LoginForm(FlaskForm):
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 class DeleteForm(FlaskForm):
-    username = StringField("Enter the username to remove: ", validators=[DataRequired()])
+    netid = StringField("Enter the NetID to remove: ", validators=[DataRequired()])
     submit = SubmitField("Delete User")
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -110,22 +122,55 @@ def register():
     form = UserForm()
 
     if(form.validate_on_submit()):
-        username = form.username.data
+        netid = form.netid.data
         fname = form.fname.data
         lname = form.lname.data
         pw = form.password.data
-        createUser(username, fname, lname, pw)
-        return redirect(url_for("home"))
+        email = form.email.data
+        session['userdata'] = (netid, fname, lname, email, pw)
+        return redirect(url_for("register_2"))
 
     return render_template("register.html", form = form)
+
+@app.route("/register_2", methods = ["GET", "POST"])
+def register_2():
+    form = DescriptionForm()
+
+    if(form.validate_on_submit()):
+        classyear = form.classyear.data
+        major = form.major.data
+        bio = form.bio.data
+        session['descriptiondata'] = (classyear, major, bio)
+        return redirect(url_for("register_3"))
+
+    return render_template("register_2.html", form = form)
+
+@app.route("/register_3", methods = ["GET", "POST"])
+def register_3():
+    form = ProfileForm()
+
+    if(form.validate_on_submit()):
+        industry = form.industry.data
+        role = form.role.data
+        subject = form.subject.data
+        organizations = form.organizations.data
+        bio = form.bio.data
+
+        userdata = session.get('userdata', None)
+        descriptiondata = session.get('descriptiondata', None)
+
+        createUser(data[0], data[1], data[2], data[3], data[4])
+        return redirect(url_for("home"))
+
+    return render_template("register_3.html", form = form)
 
 @app.route("/delete", methods = ["GET", "POST"])
 def delete():
     form = DeleteForm()
 
     if(form.validate_on_submit()):
-        username = form.username.data
-        deleteUser(username)
+        netid = form.netid.data
+        deleteUser(netid)
         return redirect(url_for("home"))
 
     return render_template("delete.html", form = form)
@@ -135,14 +180,14 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        user = User.query.filter_by(username = form.username.data).first()
+        user = User.query.filter_by(netid = form.netid.data).first()
         if user is not None and user.verify_password(form.password.data):
             login_user(user, form.remember_me.data)
             next = request.args.get("next")
             if next is None or not next.startswith("/"):
                 next = url_for("home")
             return redirect(next)
-        flash("Invalid username or password.")
+        flash("Invalid NetID or password.")
     return render_template("login.html", form = form)
 
 @app.route("/logout")
@@ -163,13 +208,13 @@ def page_not_found(e):
     return render_template("page_not_found.html"), 404
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-def createUser(username, fname, lname, pw):
-    user = User(username = username, firstname = fname, lastname = lname, password = pw)
+def createUser(netid, fname, lname, email, pw):
+    user = User(netid = netid, firstname = fname, lastname = lname, email = email, password = pw)
     db.session.add(user)
     db.session.commit()
 
-def deleteUser(username):
-    user = User.query.filter_by(username = username).first()
+def deleteUser(netid):
+    user = User.query.filter_by(netid = netid).first()
     if(user != None):
         db.session.delete(user)
         db.session.commit()

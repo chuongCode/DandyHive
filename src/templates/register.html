@@ -10,11 +10,11 @@
 	<form action="{{url_for('register')}}" method = "POST">
 		{{ form.hidden_tag() }}
 		<ul>
-			<li class="item"> {{ form.username.label }} {{ form.username() }} </li>
+			<li class="item"> {{ form.netid.label }} {{ form.netid() }} </li>
 			<li class="item"> {{ form.password.label }} {{ form.password() }} </li>
-
 			<li class="item"> {{ form.fname.label }} {{ form.fname() }} </li>
 			<li class="item"> {{ form.lname.label }} {{ form.lname() }} </li>
+			<li class="item"> {{ form.email.label }} {{ form.email() }} </li>
 			<li class="item"> {{ form.submit() }} </li>
 		</ul>
 
