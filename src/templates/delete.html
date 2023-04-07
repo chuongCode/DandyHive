@@ -10,7 +10,7 @@
 	<h1>Remove a mentor from the database</h1>
 	<form action="{{url_for('delete')}}" method = "POST">
 		{{form.hidden_tag()}}
-		{{form.username.label}} {{form.username()}}
+		{{form.netid.label}} {{form.netid()}}
 		{{form.submit()}}
 	</form>
 	{% endblock %}
