@@ -1,11 +1,13 @@
 import os
 from flask import Flask, session, render_template, redirect, url_for, flash, request
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import backref
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, BooleanField
 from wtforms.validators import DataRequired
 
 from werkzeug.security import generate_password_hash, check_password_hash
+
 from flask_login import UserMixin
 from flask_login import login_manager
 from flask_login import LoginManager
@@ -58,18 +60,20 @@ class Description(db.Model):
     minor = db.Column(db.String(64), index = True)
     cluster = db.Column(db.String(64), index = True)
 
+    user = db.relationship("User", backref=backref("users", uselist=False))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 class Profile(db.Model):
     __tablename__ = "profile"
-    id = db.Column(db.Integer, primary_key = True)
-    industry = db.Column(db.String(64), index = True)
-    role = db.Column(db.String(64), index = True)
-    subject = db.Column(db.String(64), index = True)
-    organizations = db.Column(db.String(64), index = True)
-    bio = db.Column(db.String(64), index = True)
+    id = db.Column(db.Integer, primary_key=True)
+    industry = db.Column(db.String(64), index=True)
+    role = db.Column(db.String(64), index=True)
+    subject = db.Column(db.String(64), index=True)
+    organizations = db.Column(db.String(64), index=True)
+    bio = db.Column(db.Text(), index=True)
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship("User", backref=backref("user_profile", uselist=False))
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -84,7 +88,8 @@ class UserForm(FlaskForm):
 class DescriptionForm(FlaskForm):
     classyear = StringField("Enter your class year: ", validators=[DataRequired()])
     major = StringField("Enter your major: ", validators=[DataRequired()])
-    bio = StringField("Enter a short bio: ", validators=[DataRequired()])
+    minor = StringField("Enter your minor: ", validators=[DataRequired()])
+    cluster = StringField("Enter your clusters: ", validators=[DataRequired()])
     submit = SubmitField("Add description")
 
 class ProfileForm(FlaskForm):
@@ -139,8 +144,9 @@ def register_2():
     if(form.validate_on_submit()):
         classyear = form.classyear.data
         major = form.major.data
-        bio = form.bio.data
-        session['descriptiondata'] = (classyear, major, bio)
+        minor = form.minor.data
+        cluster = form.cluster.data
+        session['descriptiondata'] = (classyear, major, minor, cluster)
         return redirect(url_for("register_3"))
 
     return render_template("register_2.html", form = form)
@@ -159,7 +165,16 @@ def register_3():
         userdata = session.get('userdata', None)
         descriptiondata = session.get('descriptiondata', None)
 
-        createUser(data[0], data[1], data[2], data[3], data[4])
+        createUser(userdata[0], userdata[1], userdata[2], userdata[3], userdata[4])
+        user = User.query.filter_by(netid = userdata[0]).first()
+        login_user(user)
+
+        new_description = Description(classyear = descriptiondata[0], major = descriptiondata[1], minor = descriptiondata[2], cluster = descriptiondata[3], user_id = current_user.id)
+        new_profile = Profile(industry = industry, role = role, subject = subject, organizations = organizations, bio = bio, user_id = current_user.id)
+        db.session.add(new_description)
+        db.session.add(new_profile)
+        db.session.commit()
+
         return redirect(url_for("home"))
 
     return render_template("register_3.html", form = form)
@@ -201,7 +216,7 @@ def logout():
 @login_required
 def mentors():
     users = User.query.all()
-    return render_template("mentors.html", users=users)
+    return render_template("mentors.html", users=users, Profile = Profile, Decription = Description)
 
 @app.errorhandler(404)
 def page_not_found(e):
