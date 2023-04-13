@@ -1,0 +1,28 @@
+{% extends "base_login.html" %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% block head %}
+        <title>View Profile</title>
+        <meta charset="utf-8">
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}
+        <!-- have some styling in here plz -->
+            <h1 style="
+            position: absolute;
+            width: 785px;
+            height: 90px;
+            left: 350px;
+            top: 367px;
+            font-family: 'Lato';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 75px;
+            line-height: 90px;
+            text-align: center;">
+            Welcome {{user.firstname}}</h1>
+        {% endblock %}
+    </body>
+</html>

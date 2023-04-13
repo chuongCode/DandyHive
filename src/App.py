@@ -118,9 +118,16 @@ class DeleteForm(FlaskForm):
 def index():
     return render_template("start.html")
 
+@app.route("/start")
+def start():
+    return render_template("start.html")
+
 @app.route("/home")
+@login_required
 def home():
-    return render_template("home.html")
+    fname = current_user.firstname
+    lname = current_user.lastname
+    return render_template("home.html", fname = fname, lname = lname)
 
 @app.route("/register", methods = ["GET", "POST"])
 def register():
@@ -151,6 +158,7 @@ def register_2():
 
     return render_template("register_2.html", form = form)
 
+#Registration page for both the mentors
 @app.route("/register_3", methods = ["GET", "POST"])
 def register_3():
     form = ProfileForm()
@@ -210,13 +218,19 @@ def login():
 def logout():
     logout_user()
     flash("You have been logged out.")
-    return redirect(url_for("home"))
+    return redirect(url_for("start"))
 
 @app.route("/mentors", methods = ["GET"])
 @login_required
 def mentors():
     users = User.query.all()
     return render_template("mentors.html", users=users, Profile = Profile, Decription = Description)
+
+@app.route("/profile",methods=["GET"])
+@login_required
+def profile():
+    user = current_user
+    return render_template("profile.html", user=user)
 
 @app.errorhandler(404)
 def page_not_found(e):

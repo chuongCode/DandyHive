@@ -19,9 +19,15 @@
 				<h1 style="margin-top: 20rem; text-align: center">
 					A 404 Error was encountered while processing your request.
 				</h1>
+				{% if current_user.firstname %}
 				<p style="text-align: center">
 					Return home <a href="{{url_for('home')}}" style="color:#FFD100">here</a>.
 				</p>
+				{% else %}
+				<p style="text-align: center">
+					Return home <a href="{{url_for('start')}}" style="color:#FFD100">here</a>.
+				</p>
+				{% endif %}
 			</div>
 		</div>
 		{% endblock %}

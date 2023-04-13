@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_login.html" %}
 <!doctype html>
 <html lang="en">
 
@@ -12,14 +12,14 @@
     <h1> Mentor List </h1>
     {% for user in users %}
     <p>{{user.netid}}</p>
-    <p>{{user.firstname}}</p>
-    <p>{{user.lastname}}</p>
+    <p>{{user.firstname}} {{user.lastname}}</p>
+    <!-- <p>{{user.lastname}}</p> -->
 
-    <p>{{user.user_profile.industry}}</p>
+    <!-- <p>{{user.user_profile.industry}}</p>
     <p>{{user.user_profile.role}}</p>
     <p>{{user.user_profile.subject}}</p>
     <p>{{user.user_profile.organizations}}</p>
-    <p>{{user.user_profile.bio}}</p>
+    <p>{{user.user_profile.bio}}</p> -->
 
     </p>
     {% endfor %}

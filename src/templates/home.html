@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_login.html" %}
 <!doctype html>
 <link href="{{url_for('static',filename='css/landing_page.css')}}" rel="stylesheet">
 <html lang="en">
@@ -32,7 +32,7 @@
         line-height: 90px;
 
         text-align: center;">
-            Welcome to DandyHive!
+            Welcome {{fname}}!
         </h1>
     </div>
 

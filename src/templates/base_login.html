@@ -10,11 +10,12 @@
 <body>
     <ul class="navbar">
         <li class="nav"> <h3> <a href="{{url_for('home')}}">Home</a> </h3> </li>
-        <li class="nav"> <h3> <a href="{{url_for('register')}}">Register</a> </h3> </li>
-        <li class="nav"> <h3> <a href="{{url_for('login')}}">Login</a> </h3> </li>
-        <!-- <li class="nav"> <h3> <a href="{{url_for('logout')}}">Logout</a> </h3> </li> -->
+        <!-- <li class="nav"> <h3> <a href="{{url_for('register')}}">Register</a> </h3> </li> -->
+        <!-- <li class="nav"> <h3> <a href="{{url_for('login')}}">Login</a> </h3> </li> -->
         <!-- <li class="nav"> <h3> <a href="{{url_for('delete')}}">Delete mentors</a> </h3> </li> -->
-        <!-- <li class="nav"> <h3> <a href="{{url_for('mentors')}}">Browse mentors</a> </h3> </li> -->
+        <li class="nav"> <h3> <a href="{{url_for('mentors')}}">Browse mentors</a> </h3> </li>
+        <li class="nav"> <h3> <a href="{{url_for('profile')}}">View Profile</a> </h3></li>
+        <li class="nav"> <h3> <a href="{{url_for('logout')}}">Logout</a> </h3> </li>
     </ul>
 	{% block body %}
 
