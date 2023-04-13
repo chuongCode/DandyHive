@@ -232,6 +232,12 @@ def profile():
     user = current_user
     return render_template("profile.html", user=user)
 
+@app.route("/profile/<id>/")
+@login_required
+def mentor_profile(id):
+    mentor = User.query.filter_by(id=id).first()
+    return render_template('mentor_profile.html', mentor = mentor)
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("page_not_found.html"), 404
