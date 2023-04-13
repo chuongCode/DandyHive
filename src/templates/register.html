@@ -15,7 +15,8 @@
 			<li class="item"> {{ form.fname.label }} {{ form.fname() }} </li>
 			<li class="item"> {{ form.lname.label }} {{ form.lname() }} </li>
 			<li class="item"> {{ form.email.label }} {{ form.email() }} </li>
-			<li class="item"> {{ form.submit() }} </li>
+			<li class="item"> {{ form.isMentor.label }} {{ form.isMentor(class_="form-check-input") }}  </li>
+			<li class="item"> {{ form.submit() }} </li>	
 		</ul>
 
 	</form>

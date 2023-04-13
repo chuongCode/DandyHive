@@ -37,6 +37,7 @@ class User(UserMixin, db.Model):
     firstname = db.Column(db.String(64), index = True)
     lastname = db.Column(db.String(64), index = True)
     email = db.Column(db.String(64), index = True)
+    isMentor  = db.Column(db.Boolean)
 
     description = db.relationship('Description')
     profile = db.relationship('Profile')
@@ -83,6 +84,7 @@ class UserForm(FlaskForm):
     lname = StringField("Last name: ", validators=[DataRequired()])
     email = StringField("Email: ", validators=[DataRequired()])
     password = PasswordField("Password: ", validators=[DataRequired()])
+    isMentor  = BooleanField("Would you like to be a mentor?", validators=[DataRequired()])
     submit = SubmitField("Register")
 
 class DescriptionForm(FlaskForm):
@@ -139,7 +141,8 @@ def register():
         lname = form.lname.data
         pw = form.password.data
         email = form.email.data
-        session['userdata'] = (netid, fname, lname, email, pw)
+        IsMentor = form.isMentor.data
+        session['userdata'] = (netid, fname, lname, email, pw, IsMentor)
         return redirect(url_for("register_2"))
 
     return render_template("register.html", form = form)
@@ -173,7 +176,7 @@ def register_3():
         userdata = session.get('userdata', None)
         descriptiondata = session.get('descriptiondata', None)
 
-        createUser(userdata[0], userdata[1], userdata[2], userdata[3], userdata[4])
+        createUser(userdata[0], userdata[1], userdata[2], userdata[3], userdata[4], userdata[5])
         user = User.query.filter_by(netid = userdata[0]).first()
         login_user(user)
 
@@ -220,11 +223,15 @@ def logout():
     flash("You have been logged out.")
     return redirect(url_for("start"))
 
-@app.route("/mentors", methods = ["GET"])
+@app.route("/mentors", methods=["GET"])
 @login_required
 def mentors():
-    users = User.query.all()
-    return render_template("mentors.html", users=users, Profile = Profile, Decription = Description)
+    search_term = request.args.get('search', '')
+    users = User.query.filter(User.isMentor == True)
+    if search_term:
+        users = users.join(Profile).filter(Profile.organizations.ilike(f"%{search_term}%"))
+    users = users.all()
+    return render_template("mentors.html", users=users, Profile=Profile, Description=Description, search_term=search_term)
 
 @app.route("/profile",methods=["GET"])
 @login_required
@@ -243,8 +250,8 @@ def page_not_found(e):
     return render_template("page_not_found.html"), 404
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-def createUser(netid, fname, lname, email, pw):
-    user = User(netid = netid, firstname = fname, lastname = lname, email = email, password = pw)
+def createUser(netid, fname, lname, email, pw, isMentor):
+    user = User(netid = netid, firstname = fname, lastname = lname, email = email, password = pw, isMentor = isMentor)
     db.session.add(user)
     db.session.commit()
 

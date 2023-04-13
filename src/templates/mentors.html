@@ -9,9 +9,11 @@
 
 <body>
     {% block body %}
-    <h1 style="
-    padding-top: 100px;"> Mentor List </h1>
-    
+    <h1 style="padding-top: 100px;"> Mentor List </h1>
+    <form action="{{ url_for('mentors') }}" method="GET">
+      <input type="text" name="search" value="{{ search_term }}">
+      <button type="submit">Search</button>
+    </form>
     {% for user in users %}
     <!-- <p>{{user.netid}}</p> -->
     <p style="position: static"><a href="{{url_for('mentor_profile',id=user.id)}}">{{user.firstname}} {{user.lastname}}</a></p>
@@ -22,7 +24,6 @@
     <p>{{user.user_profile.subject}}</p>
     <p>{{user.user_profile.organizations}}</p>
     <p>{{user.user_profile.bio}}</p> -->
-
     </p>
     {% endfor %}
     {% endblock %}
