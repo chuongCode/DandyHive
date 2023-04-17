@@ -84,7 +84,7 @@ class UserForm(FlaskForm):
     lname = StringField("Last name: ", validators=[DataRequired()])
     email = StringField("Email: ", validators=[DataRequired()])
     password = PasswordField("Password: ", validators=[DataRequired()])
-    isMentor  = BooleanField("Would you like to be a mentor?", validators=[DataRequired()])
+    isMentor  = BooleanField("Would you like to be a mentor?", validators=[])
     submit = SubmitField("Register")
 
 class DescriptionForm(FlaskForm):

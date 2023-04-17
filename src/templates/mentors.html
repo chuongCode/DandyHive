@@ -9,16 +9,18 @@
 
 <body>
     {% block body %}
-    <h1 style="padding-top: 100px;"> Mentor List </h1>
-    <form action="{{ url_for('mentors') }}" method="GET">
-      <input type="text" name="search" value="{{ search_term }}">
+    <form action="{{ url_for('mentors') }}" style="padding-top: 10rem; display: flex; justify-content: center; height: 30px" method="GET">
+      <input type="text" name="search" style="width: 30rem" placeholder="Search Mentor or type a filter" value="{{ search_term }}">
       <button type="submit">Search</button>
     </form>
+    <h1 style="border-bottom: solid 3px #F5F5F5; padding-left: 2rem"> Mentor List </h1>
     {% for user in users %}
     <!-- <p>{{user.netid}}</p> -->
-    <p style="position: static"><a href="{{url_for('mentor_profile',id=user.id)}}">{{user.firstname}} {{user.lastname}}</a></p>
-    <!-- <p>{{user.lastname}}</p> -->
-
+    <ul style="list-style-type: circle; padding-left: 4rem">
+    <li style="position: static;border-bottom: 2px solid #FFD100; width: fit-content">
+      <a href="{{url_for('mentor_profile',id=user.id)}}" style="color:#FFD100; text-align:left; display:contents;">{{user.firstname}} {{user.lastname}}</a>
+    </li>
+    </ul>
     <!-- <p>{{user.user_profile.industry}}</p>
     <p>{{user.user_profile.role}}</p>
     <p>{{user.user_profile.subject}}</p>
