@@ -1,11 +1,13 @@
 import os
 from flask import Flask, session, render_template, redirect, url_for, flash, request
+from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import backref
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, BooleanField
 from wtforms.validators import DataRequired
 
+from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from flask_login import UserMixin
@@ -24,6 +26,10 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(basedir, "data.sqlite")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SECRET_KEY"] = "abc123"
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'images')
+
+print(UPLOAD_FOLDER)
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 db = SQLAlchemy(app)
 
@@ -38,6 +44,7 @@ class User(UserMixin, db.Model):
     lastname = db.Column(db.String(64), index = True)
     email = db.Column(db.String(64), index = True)
     isMentor  = db.Column(db.Boolean)
+    pfp = db.Column(db.String(64), index = True)
 
     description = db.relationship('Description')
     profile = db.relationship('Profile')
@@ -131,6 +138,20 @@ def home():
     lname = current_user.lastname
     return render_template("home.html", fname = fname, lname = lname)
 
+@app.route('/upload')
+def upload_files():
+   return render_template('upload.html')
+
+@app.route('/uploader', methods = ['GET', 'POST'])
+def upload_file():
+   if request.method == 'POST':
+      f = request.files['file']
+      filename = secure_filename(f.filename)
+      f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+      session['filedata'] = (filename)
+
+      return redirect(url_for("register"))
+
 @app.route("/register", methods = ["GET", "POST"])
 def register():
     form = UserForm()
@@ -142,7 +163,9 @@ def register():
         pw = form.password.data
         email = form.email.data
         IsMentor = form.isMentor.data
-        session['userdata'] = (netid, fname, lname, email, pw, IsMentor)
+        pfp = session.get('filedata', None)
+        session['userdata'] = (netid, fname, lname, email, pw, IsMentor, pfp)
+
         return redirect(url_for("register_2"))
 
     return render_template("register.html", form = form)
@@ -176,7 +199,7 @@ def register_3():
         userdata = session.get('userdata', None)
         descriptiondata = session.get('descriptiondata', None)
 
-        createUser(userdata[0], userdata[1], userdata[2], userdata[3], userdata[4], userdata[5])
+        createUser(userdata[0], userdata[1], userdata[2], userdata[3], userdata[4], userdata[5], userdata[6])
         user = User.query.filter_by(netid = userdata[0]).first()
         login_user(user)
 
@@ -250,8 +273,8 @@ def page_not_found(e):
     return render_template("page_not_found.html"), 404
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-def createUser(netid, fname, lname, email, pw, isMentor):
-    user = User(netid = netid, firstname = fname, lastname = lname, email = email, password = pw, isMentor = isMentor)
+def createUser(netid, fname, lname, email, pw, isMentor, pfp):
+    user = User(netid = netid, firstname = fname, lastname = lname, email = email, password = pw, isMentor = isMentor, pfp = pfp)
     db.session.add(user)
     db.session.commit()
 

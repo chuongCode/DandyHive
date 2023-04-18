@@ -18,8 +18,14 @@
 			<li class="item"> {{ form.lname.label }} {{ form.lname() }} </li>
 			<li class="item"> {{ form.email.label }} {{ form.email() }} </li>
 			<li class="item"> {{ form.isMentor.label }} {{ form.isMentor(class_="form-check-input") }}  </li>
-			<li class="item"> {{ form.submit() }} </li>	
+			<li class="item"> {{ form.submit() }} </li>
 		</ul>
+
+		<!-- <form action = "http://localhost:5000/src/static/images" method = "POST"
+			 enctype = "multipart/form-data">
+			 <input type = "file" name = "file" />
+			 <input type = "submit"/>
+		</form> -->
 
 	</form>
 	{% endblock %}
