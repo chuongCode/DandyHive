@@ -8,6 +8,7 @@
     <body>
         {% block body %}
             <h1 style="padding-top:100px;">This is {{mentor.firstname}}'s profile</h1>
+            <button><a href="mailto: {{mentor.email}}">Email</a></button>
         {% endblock %}
     </body>
 </html>
