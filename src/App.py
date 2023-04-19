@@ -1,6 +1,5 @@
 import os
 from flask import Flask, session, render_template, redirect, url_for, flash, request
-from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import backref
 from flask_wtf import FlaskForm
@@ -163,7 +162,11 @@ def register():
         pw = form.password.data
         email = form.email.data
         IsMentor = form.isMentor.data
-        pfp = session.get('filedata', None)
+        if request.method == 'POST':
+            f = request.files['file']
+            filename = secure_filename(f.filename)
+            f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        pfp = filename
         session['userdata'] = (netid, fname, lname, email, pw, IsMentor, pfp)
 
         return redirect(url_for("register_2"))
@@ -188,7 +191,6 @@ def register_2():
 @app.route("/register_3", methods = ["GET", "POST"])
 def register_3():
     form = ProfileForm()
-
     if(form.validate_on_submit()):
         industry = form.industry.data
         role = form.role.data
@@ -274,7 +276,7 @@ def page_not_found(e):
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 def createUser(netid, fname, lname, email, pw, isMentor, pfp):
-    user = User(netid = netid, firstname = fname, lastname = lname, email = email, password = pw, isMentor = isMentor, pfp = pfp)
+    user = User(netid = netid, firstname = fname, lastname = lname, email = email, password = pw, isMentor = isMentor, pfp=pfp)
     db.session.add(user)
     db.session.commit()
 
