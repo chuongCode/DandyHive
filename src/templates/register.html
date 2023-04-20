@@ -8,27 +8,30 @@
 </head>
 <body>
 	{% block body %}
-	<h1>Add a mentor!</h1>
+	<style>
+		.item{
+			width:20rem;
+			/* padding-left: 2rem; */
+		}
+		.inputs{
+			width: 10rem;
+			float: right;
+		}
+	</style>
+	<h1 style="padding-top: 6rem; padding-left: 2rem;">Register an Account</h1>
 	<form action="{{url_for('register')}}" method = "POST" enctype = "multipart/form-data">
 		{{ form.hidden_tag() }}
 		<ul>
-			<li class="item"> {{ form.netid.label }} {{ form.netid() }} </li>
-			<li class="item"> {{ form.password.label }} {{ form.password() }} </li>
-			<li class="item"> {{ form.fname.label }} {{ form.fname() }} </li>
-			<li class="item"> {{ form.lname.label }} {{ form.lname() }} </li>
-			<li class="item"> {{ form.email.label }} {{ form.email() }} </li>
+			<li class="item"> {{ form.netid.label }} {{ form.netid(class_="inputs", placeholder_="e.g. jdoe3") }} </li>
+			<li class="item"> {{ form.password.label }} {{ form.password(class_="inputs",placeholder_="Password") }} </li>
+			<li class="item"> {{ form.fname.label }} {{ form.fname(class_="inputs", placeholder_="e.g. John") }} </li>
+			<li class="item"> {{ form.lname.label }} {{ form.lname(class_="inputs", placeholder_="e.g. Doe") }} </li>
+			<li class="item"> {{ form.email.label }} {{ form.email(class_="inputs", placeholder_="jdoe3@u.rochester.edu") }} </li>
 			<li class="item"> {{ form.isMentor.label }} {{ form.isMentor(class_="form-check-input") }}  </li>
-			<input type = "file" name = "file" />
-			<!-- <input type = "file" name = "file" /> -->
-
+			<label for="file">Choose profile picture to upload </label>
+			<input type = "file" name = "file" accept="image/*"/>
 			<li class="item"> {{ form.submit() }} </li>
 		</ul>
-
-		<!-- <form action = "http://localhost:5000/src/static/images" method = "POST"
-			 enctype = "multipart/form-data">
-			 <input type = "file" name = "file" />
-			 <input type = "submit"/>
-		</form> -->
 
 	</form>
 	{% endblock %}

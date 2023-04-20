@@ -8,17 +8,16 @@
 </head>
 <body>
 	{% block body %}
-	<h1>Add a mentor!</h1>
+	<h1 style="padding-top: 6rem">Register an Account</h1>
 	<form action="{{url_for('register_2')}}" method = "POST">
 		{{ form.hidden_tag() }}
 		<ul>
-			<li class="item"> {{ form.classyear.label }} {{ form.classyear() }} </li>
-			<li class="item"> {{ form.major.label }} {{ form.major() }} </li>
-			<li class="item"> {{ form.minor.label }} {{ form.minor() }} </li>
-			<li class="item"> {{ form.cluster.label }} {{ form.cluster() }} </li>
+			<li class="item"> {{ form.classyear.label }} {{ form.classyear(placeholder_="e.g. 2024") }} </li>
+			<li class="item"> {{ form.major.label }} {{ form.major(placeholder_="e.g. Computer Science") }} </li>
+			<li class="item"> {{ form.minor.label }} {{ form.minor(placeholder_="e.g. Mathematics") }} </li>
+			<li class="item"> {{ form.cluster.label }} {{ form.cluster(placeholder_="e.g. Philosophy") }} </li>
 			<li class="item"> {{ form.submit() }} </li>
 		</ul>
-
 	</form>
 	{% endblock %}
 </body>

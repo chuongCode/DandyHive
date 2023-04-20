@@ -8,15 +8,15 @@
 </head>
 <body>
 	{% block body %}
-	<h1>Add a mentor!</h1>
+	<h1 style="padding-top: 6rem">Register an Account</h1>
 	<form action="{{url_for('register_3')}}" method = "POST">
 		{{ form.hidden_tag() }}
 		<ul>
-			<li class="item"> {{ form.industry.label }} {{ form.industry() }} </li>
-			<li class="item"> {{ form.role.label }} {{ form.role() }} </li>
-			<li class="item"> {{ form.subject.label }} {{ form.subject() }} </li>
-			<li class="item"> {{ form.organizations.label }} {{ form.organizations() }} </li>
-			<li class="item"> {{ form.bio.label }} {{ form.bio() }} </li>
+			<li class="item"> {{ form.industry.label }} {{ form.industry(placeholder_="e.g. Technology") }} </li>
+			<li class="item"> {{ form.role.label }} {{ form.role(placeholder_="e.g. Software Engineer") }} </li>
+			<li class="item"> {{ form.subject.label }} {{ form.subject(placeholder_="Focus of mentorship sessions") }} </li>
+			<li class="item"> {{ form.organizations.label }} {{ form.organizations(placeholder_="e.g. CSUG") }} </li>
+			<li class="item"> {{ form.bio.label }} {{ form.bio(placeholder_="Additional Comments") }} </li>
 			<li class="item"> {{ form.submit() }} </li>
 		</ul>
 

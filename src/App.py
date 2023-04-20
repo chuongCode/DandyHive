@@ -91,14 +91,14 @@ class UserForm(FlaskForm):
     email = StringField("Email: ", validators=[DataRequired()])
     password = PasswordField("Password: ", validators=[DataRequired()])
     isMentor  = BooleanField("Would you like to be a mentor?", validators=[])
-    submit = SubmitField("Register")
+    submit = SubmitField("Continue")
 
 class DescriptionForm(FlaskForm):
     classyear = StringField("Enter your class year: ", validators=[DataRequired()])
     major = StringField("Enter your major: ", validators=[DataRequired()])
     minor = StringField("Enter your minor: ", validators=[DataRequired()])
     cluster = StringField("Enter your clusters: ", validators=[DataRequired()])
-    submit = SubmitField("Add description")
+    submit = SubmitField("Continue")
 
 class ProfileForm(FlaskForm):
     industry = StringField("What industries are you interested in?", validators=[DataRequired()])
@@ -106,7 +106,7 @@ class ProfileForm(FlaskForm):
     subject = StringField("What do you want your sessions to focus on?", validators=[DataRequired()])
     organizations = StringField("What student organizations are you involved in?", validators=[DataRequired()])
     bio = StringField("Comments:", validators=[DataRequired()])
-    submit = SubmitField("Add preferences")
+    submit = SubmitField("Register")
 
 class LoginForm(FlaskForm):
     netid = StringField("NetID: ", validators=[DataRequired()])
