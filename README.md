@@ -11,3 +11,4 @@ To start: `python3 ./src/App.py`
 To start Venv: `.\DandyHiveVenv\Scripts\activate`
 To start app: `python .\src\App.py`
 
+Made with love by Matt Fortes, Sam Frank, Darron Dai, and Richard Chuong 💙💛
